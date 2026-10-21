@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReviewSphere - Customer Review</title>
+    <script>
+      // Single Page Application Fallback for static hosts (Vercel, Netlify, GitHub Pages)
+      // Redirects to current path via index.html so React Router renders the review form
+      var path = window.location.pathname + window.location.search + window.location.hash;
+      window.location.replace('/' + (path.startsWith('/') ? path.substring(1) : path));
+    </script>
+  </head>
+  <body style="font-family: system-ui, sans-serif; background-color: #0b1320; color: #f1f5f9; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <div style="text-align: center;">
+      <h2 style="margin-bottom: 8px;">Loading Customer Review Form...</h2>
+      <p style="color: #94a3b8; font-size: 14px;">Please wait while we connect you to ReviewSphere.</p>
+    </div>
+  </body>
+</html>

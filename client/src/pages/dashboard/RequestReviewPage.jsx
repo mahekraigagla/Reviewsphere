@@ -476,22 +476,30 @@ export const RequestReviewPage = () => {
                 </div>
 
                 {/* Real 1-Click Action Triggers */}
-                <div className="space-y-2 pt-1">
-                  <span className="font-bold text-slate-300 text-xs block">Click to Dispatch to Customer Right Now:</span>
-                  
-                  {/* WhatsApp Action */}
-                  <a
-                    href={createdInvite.whatsappUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-slate-900 font-extrabold text-xs py-3 px-4 rounded-xl flex items-center justify-between transition shadow-lg shadow-emerald-950/40"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Smartphone className="w-4 h-4" />
-                      <span>Send via WhatsApp (+{createdInvite.cleanPhone || createdInvite.customerPhone})</span>
-                    </div>
-                    <span className="bg-emerald-700 text-slate-900 text-[10px] uppercase font-black px-2 py-0.5 rounded">Open App ↗</span>
-                  </a>
+                {(() => {
+                  const resolvedReviewUrl = (createdInvite.reviewUrl || '').includes('localhost:3000')
+                    ? createdInvite.reviewUrl.replace('http://localhost:3000', window.location.origin)
+                    : createdInvite.reviewUrl;
+                  const resolvedWhatsappUrl = (createdInvite.whatsappUrl || '').includes('localhost:3000')
+                    ? createdInvite.whatsappUrl.replaceAll('http://localhost:3000', window.location.origin).replaceAll('http%3A%2F%2Flocalhost%3A3000', encodeURIComponent(window.location.origin))
+                    : createdInvite.whatsappUrl;
+                  return (
+                    <div className="space-y-2 pt-1">
+                      <span className="font-bold text-slate-300 text-xs block">Click to Dispatch to Customer Right Now:</span>
+                      
+                      {/* WhatsApp Action */}
+                      <a
+                        href={resolvedWhatsappUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-slate-900 font-extrabold text-xs py-3 px-4 rounded-xl flex items-center justify-between transition shadow-lg shadow-emerald-950/40"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Smartphone className="w-4 h-4" />
+                          <span>Send via WhatsApp (+{createdInvite.cleanPhone || createdInvite.customerPhone})</span>
+                        </div>
+                        <span className="bg-emerald-700 text-slate-900 text-[10px] uppercase font-black px-2 py-0.5 rounded">Open App ↗</span>
+                      </a>
 
                   {/* Gmail Web Action */}
                   <a
@@ -507,11 +515,13 @@ export const RequestReviewPage = () => {
                     <span className="bg-rose-700 text-slate-900 text-[10px] uppercase font-black px-2 py-0.5 rounded">Open Gmail ↗</span>
                   </a>
                 </div>
+              );
+            })()}
 
                 {/* Direct Customer Review Form Opener */}
                 <div className="pt-2 border-t border-slate-200 space-y-2">
                   <a 
-                    href={createdInvite.reviewUrl} 
+                    href={(createdInvite.reviewUrl || '').includes('localhost:3000') ? createdInvite.reviewUrl.replace('http://localhost:3000', window.location.origin) : createdInvite.reviewUrl} 
                     target="_blank" 
                     rel="noreferrer"
                     className="w-full bg-teal-600 hover:bg-teal-500 text-slate-900 font-extrabold text-xs py-3 rounded-xl text-center block transition shadow-lg flex items-center justify-center gap-2"
@@ -756,9 +766,19 @@ export const RequestReviewPage = () => {
             <tbody className="divide-y divide-slate-800/80">
               {invitations && invitations.length > 0 ? (
                 invitations.map(inv => {
-                  const whatsappLink = inv.whatsappUrl || `https://api.whatsapp.com/send?phone=${(inv.customerPhone||'').replace(/[^0-9]/g,'')}&text=${encodeURIComponent(`Hi ${inv.customerName}! Please share your review for ${inv.productName}: ${inv.reviewUrl}`)}`;
-                  const mailtoLink = inv.mailtoUrl || `mailto:${inv.customerEmail}?subject=${encodeURIComponent(`Review Request: ${inv.productName}`)}&body=${encodeURIComponent(`Hi ${inv.customerName},\n\nPlease submit your review: ${inv.reviewUrl}`)}`;
-                  const gmailLink = inv.gmailUrl || `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(inv.customerEmail)}&su=${encodeURIComponent(`Review your order from Zaptor Electronics (${inv.orderId})`)}&body=${encodeURIComponent(`Hi ${inv.customerName},\n\nPlease submit your review: ${inv.reviewUrl}`)}`;
+                  const resolvedReviewUrl = (inv.reviewUrl || '').includes('localhost:3000')
+                    ? (inv.reviewUrl || '').replace('http://localhost:3000', window.location.origin)
+                    : (inv.reviewUrl || `${window.location.origin}/review/submit?token=${inv.token}`);
+                  const resolvedWhatsappUrl = (inv.whatsappUrl || '').includes('localhost:3000')
+                    ? (inv.whatsappUrl || '').replaceAll('http://localhost:3000', window.location.origin).replaceAll('http%3A%2F%2Flocalhost%3A3000', encodeURIComponent(window.location.origin))
+                    : (inv.whatsappUrl || `https://api.whatsapp.com/send?phone=${(inv.customerPhone||'').replace(/[^0-9]/g,'')}&text=${encodeURIComponent(`Hi ${inv.customerName}! Please share your review for ${inv.productName}: ${resolvedReviewUrl}`)}`);
+                  const whatsappLink = resolvedWhatsappUrl;
+                  const mailtoLink = (inv.mailtoUrl || '').includes('localhost:3000')
+                    ? (inv.mailtoUrl || '').replace('http://localhost:3000', window.location.origin)
+                    : (inv.mailtoUrl || `mailto:${inv.customerEmail}?subject=${encodeURIComponent(`Review Request: ${inv.productName}`)}&body=${encodeURIComponent(`Hi ${inv.customerName},\n\nPlease submit your review: ${resolvedReviewUrl}`)}`);
+                  const gmailLink = (inv.gmailUrl || '').includes('localhost:3000')
+                    ? (inv.gmailUrl || '').replace('http://localhost:3000', window.location.origin)
+                    : (inv.gmailUrl || `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(inv.customerEmail)}&su=${encodeURIComponent(`Review your order from ${business?.name || 'ReviewSphere'} (${inv.orderId})`)}&body=${encodeURIComponent(`Hi ${inv.customerName},\n\nPlease submit your review: ${resolvedReviewUrl}`)}`);
 
                   return (
                     <tr key={inv.id} className="hover:bg-white/40 transition">
