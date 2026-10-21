@@ -46,7 +46,8 @@
     "verifiedCount": 40,
     "nps": 100,
     "positiveSentimentPct": 93,
-    "responseRatePct": 100
+    "responseRatePct": 100,
+    "publicBaseUrl": "https://forms.gle/P3N6wDq8vQrPu1c29"
   },
   "products": [
     {

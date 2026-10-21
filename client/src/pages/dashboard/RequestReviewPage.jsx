@@ -9,8 +9,8 @@ export const RequestReviewPage = () => {
   
   // Custom Public Base URL for worldwide deployment
   const [customBaseUrl, setCustomBaseUrl] = useState('');
-  const [googleFormUrl, setGoogleFormUrl] = useState(() => localStorage.getItem('reviewsphere_google_form') || '');
-  const [useGoogleForm, setUseGoogleForm] = useState(() => localStorage.getItem('reviewsphere_use_google_form') === 'true');
+  const [googleFormUrl, setGoogleFormUrl] = useState(() => localStorage.getItem('reviewsphere_google_form') || 'https://forms.gle/P3N6wDq8vQrPu1c29');
+  const [useGoogleForm, setUseGoogleForm] = useState(() => localStorage.getItem('reviewsphere_use_google_form') !== 'false');
 
   const handleGoogleFormChange = (url) => {
     setGoogleFormUrl(url);

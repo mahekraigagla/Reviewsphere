@@ -143,9 +143,14 @@ const requestReview = (req, res) => {
   // Create unique invitation token
   const token = `TOK-${actualOrderId}-${Date.now().toString().slice(-4)}`;
   
+  // Check if base URL is an external Google Form
+  const isExternalForm = cleanBaseUrl.includes('forms.gle') || cleanBaseUrl.includes('docs.google.com/forms');
+  
   // Real working review form URL accessible globally
-  const workingReviewUrl = `${cleanBaseUrl}/review/submit?token=${token}&orderId=${actualOrderId}&name=${encodeURIComponent(customer.name)}&email=${encodeURIComponent(customer.email)}&productId=${product.id}`;
-  const shortReviewUrl = `${cleanBaseUrl}/r/${token}`;
+  const workingReviewUrl = isExternalForm 
+    ? cleanBaseUrl 
+    : `${cleanBaseUrl}/review/submit?token=${token}&orderId=${actualOrderId}&name=${encodeURIComponent(customer.name)}&email=${encodeURIComponent(customer.email)}&productId=${product.id}`;
+  const shortReviewUrl = isExternalForm ? cleanBaseUrl : `${cleanBaseUrl}/r/${token}`;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(workingReviewUrl)}`;
 
   // Clean phone number for WhatsApp
