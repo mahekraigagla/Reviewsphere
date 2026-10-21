@@ -9,8 +9,24 @@ export const RequestReviewPage = () => {
   
   // Custom Public Base URL for worldwide deployment
   const [customBaseUrl, setCustomBaseUrl] = useState('');
-  const effectivePublicUrl = customBaseUrl || business?.publicBaseUrl || window.location.origin;
-  const universalFormUrl = `${effectivePublicUrl.replace(/\/$/, '')}/feedback`;
+  const [googleFormUrl, setGoogleFormUrl] = useState(() => localStorage.getItem('reviewsphere_google_form') || '');
+  const [useGoogleForm, setUseGoogleForm] = useState(() => localStorage.getItem('reviewsphere_use_google_form') === 'true');
+
+  const handleGoogleFormChange = (url) => {
+    setGoogleFormUrl(url);
+    localStorage.setItem('reviewsphere_google_form', url);
+  };
+  const handleToggleGoogleForm = (enabled) => {
+    setUseGoogleForm(enabled);
+    localStorage.setItem('reviewsphere_use_google_form', String(enabled));
+  };
+
+  const effectivePublicUrl = useGoogleForm && googleFormUrl
+    ? googleFormUrl
+    : (customBaseUrl || business?.publicBaseUrl || window.location.origin);
+  const universalFormUrl = useGoogleForm && googleFormUrl
+    ? googleFormUrl
+    : `${effectivePublicUrl.replace(/\/$/, '')}/feedback`;
 
   // Manual Request Form State
   const [customerName, setCustomerName] = useState('');
@@ -154,7 +170,62 @@ export const RequestReviewPage = () => {
         </div>
       </div>
 
-      {/* 5 Review Collection Channels Selector */}
+      {/* Google Form Integration Box */}
+      <div className="bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 p-4 rounded-3xl border border-purple-200/80 shadow-md space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
+              📋
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-extrabold text-sm text-slate-900">Google Form Mode (Direct Mobile WhatsApp Collection)</h3>
+                <span className="text-[10px] bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded-full border border-purple-300">
+                  Zero Hosting Needed • 100% Mobile Ready
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 mt-0.5">
+                Send a Google Form link to customers via WhatsApp. Responses save directly to your Google Sheet and can be imported here anytime.
+              </p>
+            </div>
+          </div>
+
+          <label className="flex items-center gap-2 cursor-pointer flex-shrink-0 bg-white px-3.5 py-1.5 rounded-xl border border-purple-200 shadow-sm">
+            <input 
+              type="checkbox"
+              checked={useGoogleForm}
+              onChange={e => handleToggleGoogleForm(e.target.checked)}
+              className="accent-purple-600 w-4 h-4 cursor-pointer"
+            />
+            <span className="text-xs font-bold text-purple-900">
+              {useGoogleForm ? "Active: Sending Google Form" : "Enable Google Form"}
+            </span>
+          </label>
+        </div>
+
+        {useGoogleForm && (
+          <div className="bg-white p-3 rounded-2xl border border-purple-200 flex flex-col sm:flex-row items-center gap-2 animate-in fade-in">
+            <span className="text-xs font-bold text-purple-900 flex-shrink-0">Paste Your Google Form Link:</span>
+            <input 
+              type="url"
+              placeholder="https://forms.gle/your-form-id or https://docs.google.com/forms/d/..."
+              value={googleFormUrl}
+              onChange={e => handleGoogleFormChange(e.target.value)}
+              className="w-full bg-purple-50/60 text-purple-900 font-mono text-xs px-3 py-2 rounded-xl border border-purple-200 focus:outline-none focus:border-purple-500 font-medium"
+            />
+            {googleFormUrl && (
+              <a 
+                href={googleFormUrl} 
+                target="_blank" 
+                rel="noreferrer"
+                className="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-3 py-2 rounded-xl flex-shrink-0 transition flex items-center gap-1 shadow-sm"
+              >
+                <span>Test Form ↗</span>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         
         {/* Option 1: Universal Public Form Link */}
