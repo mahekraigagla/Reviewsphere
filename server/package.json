@@ -1,0 +1,18 @@
+{
+  "name": "reviewsphere-backend",
+  "version": "1.0.0",
+  "description": "ReviewSphere REST API Backend Server",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "seed": "node src/seed/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3"
+  }
+}

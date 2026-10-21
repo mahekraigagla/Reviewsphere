@@ -1,0 +1,29 @@
+{
+  "processedCount": 2,
+  "positivePercentage": 50.0,
+  "neutralPercentage": 0.0,
+  "negativePercentage": 50.0,
+  "topTopics": [
+    {
+      "topic": "Product Quality",
+      "positivePct": 91,
+      "mentions": 1842
+    },
+    {
+      "topic": "Customer Support",
+      "positivePct": 86,
+      "mentions": 1230
+    },
+    {
+      "topic": "Delivery & Logistics",
+      "positivePct": 62,
+      "mentions": 620
+    },
+    {
+      "topic": "Ergonomics & Comfort",
+      "positivePct": 88,
+      "mentions": 1540
+    }
+  ],
+  "hdfsPath": "C:\\BDA Products review project\\pyspark_engine\\hdfs_storage\\reviewsphere\\ml-results"
+}

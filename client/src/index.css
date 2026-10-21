@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+}
+
+/* ==========================================================================
+   GLOBAL HIGH-CONTRAST READABILITY & ZERO-EYE-STRAIN OVERRIDES
+   Transform all faint/low-contrast gray text into crisp light-black / charcoal.
+   ========================================================================== */
+
+/* Very light grays (300, 400) -> Crisp dark slate charcoal / light black (#334155) */
+.text-slate-300,
+.text-slate-400,
+.text-gray-300,
+.text-gray-400,
+.text-zinc-300,
+.text-zinc-400 {
+  color: #334155 !important; /* slate-700: high-contrast dark charcoal / light black */
+}
+
+/* Medium grays (500) -> Deep crisp light black (#1e293b) */
+.text-slate-500,
+.text-gray-500,
+.text-zinc-500,
+.text-neutral-500 {
+  color: #1e293b !important; /* slate-800: deep light black */
+}
+
+/* Light muted text on white cards */
+.text-slate-600 {
+  color: #1e293b !important;
+}
+
+/* Input elements and placeholders */
+input, select, textarea {
+  color: #0f172a !important; /* slate-900 */
+}
+
+input::placeholder,
+textarea::placeholder,
+.placeholder-slate-400::placeholder {
+  color: #475569 !important; /* slate-600 */
+}
+
+/* Ensure table headers, table cells, and form labels are high-contrast */
+th, label {
+  color: #1e293b !important;
+}
+
+/* Recharts chart axis ticks and lines: make them crisp and sharp */
+.recharts-cartesian-axis-tick text {
+  fill: #1e293b !important;
+  font-weight: 600 !important;
+}
+
+.recharts-cartesian-axis-line {
+  stroke: #475569 !important;
+}
+
+/* Custom smooth transitions & animations */
+.transition-all-300 {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+.animate-glow {
+  animation: pulseGlow 4s infinite ease-in-out;
+}
