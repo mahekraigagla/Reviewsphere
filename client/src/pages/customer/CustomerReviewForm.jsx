@@ -7,10 +7,11 @@ export const CustomerReviewForm = () => {
   const [searchParams] = useSearchParams();
   const { token: routeToken } = useParams();
   const token = searchParams.get('token') || routeToken;
-  const orderIdParam = searchParams.get('orderId');
-  const emailParam = searchParams.get('email');
+  const orderIdParam = searchParams.get('orderId') || searchParams.get('orderid') || searchParams.get('order');
+  const emailParam = searchParams.get('email') || searchParams.get('customerEmail');
   const nameParam = searchParams.get('name') || searchParams.get('customerName');
-  const productIdParam = searchParams.get('productId');
+  const productIdParam = searchParams.get('productId') || searchParams.get('productid');
+  const businessIdParam = searchParams.get('businessId') || searchParams.get('businessid') || searchParams.get('bid');
   
   const { business, products, invitations, submitReview } = useData();
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ export const CustomerReviewForm = () => {
 
     setSubmitting(true);
     const res = await submitReview({
+      businessId: businessIdParam || matchedInvite?.businessId || business?.id,
       customerName,
       customerEmail,
       customerCity: customerCity || 'Bengaluru, India',
